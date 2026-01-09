@@ -59,17 +59,3 @@ EOF
   }
 }
 
-# Kubernetes Secret for MinIO credentials (used by Argo Events)
-resource "kubernetes_secret" "minio_credentials" {
-  metadata = {
-    name      = "minio-credentials"
-    namespace = kubernetes_namespace.argo_events.metadata[0].name
-  }
-
-  string_data = {
-    accesskey = "minioadmin"
-    secretkey = "minioadmin"
-  }
-
-  type = "Opaque"
-}
