@@ -1,0 +1,45 @@
+
+###--Watches a MinIO bucket for object creation
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: minio-events
+  namespace: argo-events
+spec:
+  minio:
+    example-minio:
+      bucket: "my-bucket"
+      endpoint: "minio.minio.svc.cluster.local:9000"
+      accessKey:
+        name: minio-credentials
+        key: accesskey
+      secretKey:
+        name: minio-credentials
+        key: secretkey
+      events:
+        - s3:ObjectCreated:*
+
+
+###--Triggers an OpenFunction HTTP function when MinIO emits an event.
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: minio-to-function
+  namespace: argo-events
+spec:
+  dependencies:
+    - name: minio-dep
+      eventSourceName: minio-events
+      eventName: example-minio
+  triggers:
+    - template:
+        name: openfunction-trigger
+        http:
+          url: "http://http-demo.openfunction-system.svc.cluster.local:8080"
+          method: POST
+          payload:
+            - src:
+                dependencyName: minio-dep
+              dest: body
