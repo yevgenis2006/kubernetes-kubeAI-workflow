@@ -5,7 +5,5 @@ variable "kubeconfig_path" {
   default     = "~/.kube/config"
 }
 
-variable "crossplane_namespace" {
-  type = string
-}
+
 
