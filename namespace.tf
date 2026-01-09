@@ -1,7 +1,7 @@
 
-resource "kubernetes_namespace" "crossplane" {
+resource "kubernetes_namespace" "kubeai_system" {
 metadata {
-name = "crossplane-system"
+name = "kubeai-system"
 labels = {
 "app.kubernetes.io/managed-by" = "terraform"
   }
