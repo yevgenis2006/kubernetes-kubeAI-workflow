@@ -27,6 +27,7 @@ resource "helm_release" "openfunction" {
 }
 
 
+# OpenFunction HTTP Function
 resource "kubernetes_manifest" "http_function" {
   manifest = {
     apiVersion = "core.openfunction.io/v1beta1"
@@ -56,4 +57,19 @@ EOF
       }
     }
   }
+}
+
+# Kubernetes Secret for MinIO credentials (used by Argo Events)
+resource "kubernetes_secret" "minio_credentials" {
+  metadata = {
+    name      = "minio-credentials"
+    namespace = kubernetes_namespace.argo_events.metadata[0].name
+  }
+
+  string_data = {
+    accesskey = "minioadmin"
+    secretkey = "minioadmin"
+  }
+
+  type = "Opaque"
 }
