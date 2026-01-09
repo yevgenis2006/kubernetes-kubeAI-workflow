@@ -9,13 +9,17 @@ resource "helm_release" "kubeai" {
 
   # optional: add custom settings here
   values = [
-    yamlencode({
-      proxy = {
-        # e.g. customize service type
-        service = {
-          type = "LoadBalancer"
-        }
+  yamlencode({
+    proxy = {
+      service = {
+        type = "ClusterIP"
       }
-    })
-  ]
+    }
+    ui = {
+      service = {
+        type = "ClusterIP"
+      }
+    }
+  })
+]
 }
