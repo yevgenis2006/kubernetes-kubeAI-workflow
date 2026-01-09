@@ -24,3 +24,33 @@ resource "helm_release" "keda" {
     })
   ]
 }
+
+
+resource "kubernetes_manifest" "scaledobject_cpu" {
+  manifest = {
+    apiVersion = "keda.sh/v1alpha1"
+    kind       = "ScaledObject"
+    metadata = {
+      name      = "cpu-scaledobject"
+      namespace = "default"
+    }
+    spec = {
+      scaleTargetRef = {
+        name = "my-app"
+      }
+
+      minReplicaCount = 1
+      maxReplicaCount = 10
+
+      triggers = [
+        {
+          type = "cpu"
+          metadata = {
+            type  = "Utilization"
+            value = "70"
+          }
+        }
+      ]
+    }
+  }
+}
