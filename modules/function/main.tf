@@ -22,7 +22,7 @@ resource "helm_release" "openfunction" {
   # If you want to enable Knative
   set {
     name  = "global.knative.enabled"
-    value = "true"
+    value = "false"
   }
 }
 
