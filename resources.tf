@@ -2,15 +2,15 @@
 ###  ---  Default Template  ---  ###
 module "minio" {
   source = "./modules/minio"
-  depends_on = [kubernetes_namespace.crossplane]
+  depends_on = [kubernetes_namespace.kubeai-system]
 }
 
-module "crossplane" {
-  source = "./modules/crossplane"
+module "events" {
+  source = "./modules/events"
   depends_on = [module.minio]
 }
 
-module "argo" {
-  source = "./modules/argo"
-  depends_on = [module.crossplane]
+module "keda" {
+  source = "./modules/keda"
+  depends_on = [module.events]
 }
