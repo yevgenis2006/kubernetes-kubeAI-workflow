@@ -29,12 +29,14 @@ resource "helm_release" "openfunction" {
 
 # OpenFunction HTTP Function
 resource "kubernetes_manifest" "http_function" {
+  depends_on = [helm_release.openfunction]
+
   manifest = {
     apiVersion = "core.openfunction.io/v1beta1"
     kind       = "Function"
     metadata = {
       name      = "minio-http-processor"
-      namespace = "openfunction-system"
+      namespace = "openfunction"
     }
     spec = {
       runtime    = "python"
@@ -45,8 +47,7 @@ import json
 
 def main(context, event):
     print("Received event:", event.body)
-    # process the file
-    return {"status": "processed", "file": event.body.get("Records", [{}])[0].get("s3", {}).get("object", {}).get("key", "")}
+    return {"status": "processed"}
 EOF
       }
       trigger = {
