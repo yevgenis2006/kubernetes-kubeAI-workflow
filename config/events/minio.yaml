@@ -19,9 +19,9 @@ spec:
       events:
         - s3:ObjectCreated:*
 
-###--Triggers an OpenFunction HTTP function when MinIO emits an event.
 ---
 
+###--Triggers an OpenFunction HTTP function when MinIO emits an event
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
@@ -36,7 +36,7 @@ spec:
     - template:
         name: openfunction-trigger
         http:
-          url: "http://http-demo.openfunction-system.svc.cluster.local:8080"
+          url: "http://minio-http-processor.openfunction-system.svc.cluster.local:8080"
           method: POST
           payload:
             - src:
