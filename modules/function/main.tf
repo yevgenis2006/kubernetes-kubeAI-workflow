@@ -3,8 +3,8 @@ resource "helm_release" "openfunction" {
   name       = "openfunction"
   namespace  = "openfunction"
   repository = "https://openfunction.github.io/charts/"
-  chart      = "openfunction"
-  version    = "1.4.0" # you can check latest version
+  chart      = "openfunction/openfunction"
+  version    = "0.7.0" # you can check latest version
 
   create_namespace = true
 
