@@ -26,37 +26,17 @@ resource "helm_release" "openfunction" {
   }
 }
 
-
-# OpenFunction HTTP Function
-resource "kubernetes_manifest" "http_function" {
+# Wait for Function CRD to exist
+resource "null_resource" "wait_function_crd" {
   depends_on = [helm_release.openfunction]
 
-  manifest = {
-    apiVersion = "core.openfunction.io/v1beta1"
-    kind       = "Function"
-    metadata = {
-      name      = "minio-http-processor"
-      namespace = "openfunction"
-    }
-    spec = {
-      runtime    = "python"
-      sourceType = "inline"
-      inline = {
-        code = <<EOF
-import json
-
-def main(context, event):
-    print("Received event:", event.body)
-    return {"status": "processed"}
-EOF
-      }
-      trigger = {
-        type = "http"
-        http = {
-          port = 8080
-        }
-      }
-    }
+  provisioner "local-exec" {
+    command = <<EOT
+echo "Waiting for OpenFunction Function CRD..."
+until kubectl get crd functions.core.openfunction.io > /dev/null 2>&1; do
+  sleep 5
+done
+echo "CRD exists!"
+EOT
   }
 }
-
