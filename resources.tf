@@ -1,6 +1,6 @@
 
 
-###  ---  Default Template  ---  ###
+###  ---  KubeAI Template  ---  ###
 module "minio" {
   source = "./modules/minio"
   depends_on = [kubernetes_namespace.kubeai-system]
