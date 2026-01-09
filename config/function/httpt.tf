@@ -1,22 +1,25 @@
 
-resource "kubernetes_manifest" "http_demo_function" {
+# OpenFunction HTTP Function
+resource "kubernetes_manifest" "http_function" {
+  depends_on = [helm_release.openfunction]
+
   manifest = {
     apiVersion = "core.openfunction.io/v1beta1"
     kind       = "Function"
     metadata = {
-      name      = "http-demo"
-      namespace = "openfunction-system"
+      name      = "minio-http-processor"
+      namespace = "openfunction"
     }
     spec = {
-      runtime     = "python"
-      sourceType  = "inline"
+      runtime    = "python"
+      sourceType = "inline"
       inline = {
         code = <<EOF
 import json
 
 def main(context, event):
-    name = event.body.get("name", "world")
-    return {"message": f"Hello, {name}!"}
+    print("Received event:", event.body)
+    return {"status": "processed"}
 EOF
       }
       trigger = {
