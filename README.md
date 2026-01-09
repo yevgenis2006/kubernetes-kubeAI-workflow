@@ -15,11 +15,19 @@ KubeAI, an open-source project designed to deliver the building blocks that enab
 
 ```
 
-🧠 Why It’s Useful
+🧠 Deploy a Model
 ```
-Simplifies AI inference on Kubernetes — Rather than manually setting up pods, services, autoscaling, etc., KubeAI wraps that complexity into a Kubernetes operator.
-Supports common model types — Useful for hosting conversational AI, embedding pipelines, and speech tasks in scalable clusters.
-Open source with community adoption — It’s used in environments from cloud to edge and is compatible with popular inference engines such as vLLM and Ollama
+apiVersion: kubeai.org/v1
+kind: Model
+metadata:
+  name: llama3
+spec:
+  engine: vllm
+  model: meta-llama/Meta-Llama-3-8B-Instruct
+  replicas: 1
+  resources:
+    limits:
+      nvidia.com/gpu: 1
 ```
 
 
